@@ -11,11 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\AuthServerJWT.Service\AuthServerJWT.Service.csproj" />
     <ProjectReference Include="..\AuthServerJWT.Shared\AuthServerJWT.Shared.csproj" />
   </ItemGroup>
 
