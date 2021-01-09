@@ -9,7 +9,7 @@ namespace AuthServerJWT.Core.Repositories
 {
    public interface IGenericRepository<TEntity> where TEntity:class
     {
-        Task<TEntity> GetByIdAsync();
+        Task<TEntity> GetByIdAsync(int id );
 
         Task<IEnumerable<TEntity>> GetAllAsync();
 
