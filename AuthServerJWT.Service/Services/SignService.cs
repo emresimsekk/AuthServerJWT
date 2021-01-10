@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AuthServerJWT.Service.Services
 {
-    static class  SignService
+    public static class  SignService
     {
         public static SecurityKey GetSymetricSecurityKey(string securityKey)
         {

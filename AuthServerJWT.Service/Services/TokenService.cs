@@ -66,10 +66,9 @@ namespace AuthServerJWT.Service.Services
             JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
                 issuer: _tokenOption.Issuer,
                 expires: accessTokenExpiration,
-                notBefore: DateTime.Now,
                 claims: GetClaims(userApp, _tokenOption.Audience),
-                signingCredentials: signingCredentials
-                );
+                signingCredentials: signingCredentials);
+            
             var handler = new JwtSecurityTokenHandler();
             var token = handler.WriteToken(jwtSecurityToken);
             var tokenDto = new TokenDto
