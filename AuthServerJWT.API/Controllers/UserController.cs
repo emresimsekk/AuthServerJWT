@@ -14,23 +14,26 @@ namespace AuthServerJWT.API.Controllers
     [ApiController]
     public class UserController : CustomBaseController
     {
+
         private readonly IUserService _userService;
 
         public UserController(IUserService userService)
         {
             _userService = userService;
         }
+
+        //api/user
         [HttpPost]
         public async Task<IActionResult> CreateUser(CreateUserDto createUserDto)
         {
-            return ActionResultIstance(await _userService.CreateUserAsync(createUserDto));
+            return ActionResultInstance(await _userService.CreateUserAsync(createUserDto));
         }
+
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetUser()
         {
-            return ActionResultIstance(await _userService.GetUserByNameAsync(HttpContext.User.Identity.Name));
-
+            return ActionResultInstance(await _userService.GetUserByNameAsync(HttpContext.User.Identity.Name));
         }
     }
 }

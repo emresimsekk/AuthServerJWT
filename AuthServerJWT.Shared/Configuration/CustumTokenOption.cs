@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace AuthServerJWT.Shared.Configuration
 {
@@ -8,8 +7,8 @@ namespace AuthServerJWT.Shared.Configuration
     {
         public List<String> Audience { get; set; }
         public string Issuer { get; set; }
-        public int AccessTokenExpiraation { get; set; }
-        public int RefreshTokenExpiraation { get; set; }
+        public int AccessTokenExpiration { get; set; }
+        public int RefreshTokenExpiration { get; set; }
         public string SecurityKey { get; set; }
     }
 }

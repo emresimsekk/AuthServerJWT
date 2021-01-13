@@ -7,6 +7,7 @@ using AuthServerJWT.Data;
 using AuthServerJWT.Data.Repositories;
 using AuthServerJWT.Service.Services;
 using AuthServerJWT.Shared.Configuration;
+using AuthServerJWT.Shared.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -38,60 +39,58 @@ namespace AuthServerJWT.API
         
         public void ConfigureServices(IServiceCollection services)
         {
-            //Dl Register
-            services.AddScoped<IAuthenticationService,AuthenticationService>();
+            // DI Register
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped(typeof(IGenericService<,>), typeof(GenericService<,>));
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddDbContext<AppDbContext>(opt =>
+
+            services.AddDbContext<AppDbContext>(options =>
             {
-                opt.UseSqlServer(Configuration.GetConnectionString("SqlConStr"),sqlOpt=> {
-
-                    sqlOpt.MigrationsAssembly("AuthServerJWT.Data");
-
+                options.UseSqlServer(Configuration.GetConnectionString("SqlServer"), sqlOptions =>
+                {
+                    sqlOptions.MigrationsAssembly("UdemyAuthServer.Data");
                 });
             });
-            services.AddIdentity<UserApp, IdentityRole>(opt =>
+
+            services.AddIdentity<UserApp, IdentityRole>(Opt =>
             {
-
-                opt.User.RequireUniqueEmail = true;
-                opt.Password.RequireNonAlphanumeric = false;
-
+                Opt.User.RequireUniqueEmail = true;
+                Opt.Password.RequireNonAlphanumeric = false;
             }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
-            services.Configure<CustumTokenOption>(Configuration.GetSection("TokenOptions"));
+
+            services.Configure<CustumTokenOption>(Configuration.GetSection("TokenOption"));
+
             services.Configure<List<Client>>(Configuration.GetSection("Clients"));
 
-            services.AddAuthentication(opt =>
+            services.AddAuthentication(options =>
             {
-                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                opt.DefaultChallengeScheme= JwtBearerDefaults.AuthenticationScheme;
-
-            }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opts=> {
-
-                var tokenOptions = Configuration.GetSection("TokenOptions").Get<CustumTokenOption>();
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opts =>
+            {
+                var tokenOptions = Configuration.GetSection("TokenOption").Get<CustumTokenOption>();
                 opts.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
                 {
                     ValidIssuer = tokenOptions.Issuer,
                     ValidAudience = tokenOptions.Audience[0],
-                    IssuerSigningKey = SignService.GetSymetricSecurityKey(tokenOptions.SecurityKey),
-
+                    IssuerSigningKey = SignService.GetSymmetricSecurityKey(tokenOptions.SecurityKey),
 
                     ValidateIssuerSigningKey = true,
                     ValidateAudience = true,
                     ValidateIssuer = true,
                     ValidateLifetime = true,
-                    ClockSkew=TimeSpan.Zero
-
-
+                    ClockSkew = TimeSpan.Zero
                 };
-             });
+            });
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "AuthServerJWT.API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "UdemyAuthServer.API", Version = "v1" });
             });
         }
 

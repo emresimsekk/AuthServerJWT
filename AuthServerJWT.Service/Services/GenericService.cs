@@ -6,9 +6,7 @@ using AuthServerJWT.Shared.Dtos;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AuthServerJWT.Service.Services
@@ -42,7 +40,7 @@ namespace AuthServerJWT.Service.Services
         public async Task<Response<TDto>> GetByIdAsync(int id)
         {
             var product = await _genericRepository.GetByIdAsync(id);
-            if(product!=null)
+            if(product==null)
             {
                 return Response<TDto>.Fail("Aranan ürün bulunamadı", 404, true);
             }

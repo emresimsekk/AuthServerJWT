@@ -19,7 +19,7 @@ namespace AuthServerJWT.Core.Services
 
         Task<Response<NoDataDto>> Remove(int id);
 
-        Task<Response<NoDataDto>>Update(TDto entity,int id);
+        Task<Response<NoDataDto>> Update(TDto entity, int id);
 
     }
 }

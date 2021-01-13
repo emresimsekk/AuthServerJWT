@@ -1,13 +1,10 @@
 ﻿using AuthServerJWT.Core.Dtos;
 using AuthServerJWT.Shared.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AuthServerJWT.Core.Services
 {
-   public interface IAuthenticationService
+    public interface IAuthenticationService
     {
         Task<Response<TokenDto>> CreateTokenAsync(LoginDto loginDto);
         Task<Response<TokenDto>> CreateTokenByRefreshToken(string refreshToken);
